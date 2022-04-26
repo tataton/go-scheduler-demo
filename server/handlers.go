@@ -34,7 +34,7 @@ func processBadRequestError(c *gin.Context, errMsg string) error {
 func (h *handlerGroup) getAvailability(c *gin.Context) {
 	// Unmarshal payload
 	var timeSlotJSON models.TimeSlotJSON
-	err := c.BindJSON(&timeSlotJSON)
+	err := c.BindJSON(&timeSlotJSON) // built-in analog to encoding/json.Unmarshal
 	if err != nil {
 		errMsg := "request payload failed to marshal to TimeSlotJSON format"
 		// to caller:
