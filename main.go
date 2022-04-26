@@ -8,8 +8,9 @@ import (
 	"syscall"
 	"time"
 
+	storage "go-scheduler-demo/localstorage"
 	"go-scheduler-demo/server"
-	"go-scheduler-demo/storage"
+	"go-scheduler-demo/validators"
 )
 
 func main() {
@@ -18,10 +19,12 @@ func main() {
 	defer stop()
 
 	repo := storage.New(nil)
+	jsonValidator := validators.JSONValidator{}
 
 	srv := server.New(server.Config{
-		Addr: ":8080",
-		Repo: repo,
+		Addr:      ":8080",
+		Repo:      repo,
+		Validator: &jsonValidator,
 	})
 
 	go func() {

@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type TimeSlotJSON struct {
 	Start    string `json:"start"`

@@ -16,19 +16,8 @@ func New(init []models.TimeSlot) *localstorage {
 	}
 }
 
-// IsTimeSlotExists checks to see if there is an exactly equivalent timeSlot in
-// localstorage.
-func (l *localstorage) IsTimeSlotExists(_ context.Context, timeSlot models.TimeSlot) (bool, error) {
-	for _, slot := range l.slots {
-		if slot.Duration == timeSlot.Duration && slot.Start.Equal(timeSlot.Start) {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
 // IsTimeSlotOverlapping checks to see if the argument TimeSlot overlaps with an existing
-// TimeSlot in localstorage.
+// TimeSlot in the collection.
 func (l *localstorage) IsTimeSlotOverlapping(_ context.Context, timeSlot models.TimeSlot) (bool, error) {
 	timeSlotEnd := timeSlot.Start.Add(timeSlot.Duration)
 	for _, slot := range l.slots {
@@ -45,13 +34,19 @@ func (l *localstorage) IsTimeSlotOverlapping(_ context.Context, timeSlot models.
 	return false, nil
 }
 
+// AddTimeSlot adds a TimeSlot to the collection.
 func (l *localstorage) AddTimeSlot(_ context.Context, timeSlot models.TimeSlot) error {
 	l.slots = append(l.slots, timeSlot)
 	return nil
 }
 
+// DeleteTimeSlot removes a TimeSlot from the collection, if the submitted vales exactly
+// matches an existing one.
 func (l *localstorage) DeleteTimeSlot(_ context.Context, timeSlot models.TimeSlot) error {
 	index := findIndexOf(timeSlot, l.slots)
+	if index == 0 {
+		return models.ErrNotFound
+	}
 	l.slots = append(l.slots[:index], l.slots[:len(l.slots)-1]...)
 	return nil
 }

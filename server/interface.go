@@ -9,8 +9,11 @@ import (
 )
 
 type storer interface {
-	IsTimeSlotExists(ctx context.Context, timeSlot models.TimeSlot) (bool, error)
 	IsTimeSlotOverlapping(ctx context.Context, timeSlot models.TimeSlot) (bool, error)
 	AddTimeSlot(ctx context.Context, timeSlot models.TimeSlot) error
 	DeleteTimeSlot(ctx context.Context, timeSlot models.TimeSlot) error
+}
+
+type jsonValidator interface {
+	ToTimeSlot(t models.TimeSlotJSON) (models.TimeSlot, error)
 }

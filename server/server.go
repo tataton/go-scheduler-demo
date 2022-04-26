@@ -11,15 +11,17 @@ import (
 const sla = 500 * time.Millisecond
 
 type Config struct {
-	Addr string
-	Repo storer
+	Addr      string
+	Repo      storer
+	Validator jsonValidator
 }
 
 // New returns an http.Server configured with gin routes.
 func New(c Config) *http.Server {
 	h := handlerGroup{
-		repo: c.Repo,
-		sla:  sla,
+		repo:      c.Repo,
+		validator: c.Validator,
+		sla:       sla,
 	}
 	router := gin.Default()
 	router.Use(gin.Logger())
